@@ -151,7 +151,7 @@ public class DartboardView extends JPanel {
         repaint();  // Repaint the view to clear the darts
     }
     
-    
+    /*
     // Main is only for testing not final and should be deleted at some point
     public static void main(String[] args) {
     	//SwingUtilities.invokeLater(Menu::new); // Start with the menu
@@ -193,5 +193,5 @@ public class DartboardView extends JPanel {
         reader.close();
         
     }
-    
+    */
 }

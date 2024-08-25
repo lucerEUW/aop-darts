@@ -67,10 +67,12 @@ public class MenuView extends JFrame {
             }
 
             String gameType = (String) gameTypeComboBox.getSelectedItem();
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Start the game with the selected player names and game type
-            //new DartboardView();
+            // Change this so the controller notes all the inputs from the
+            // menue. And then starts the view!!!
             new View(playerCount, playerNames, gameType);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             dispose(); // Close the menu
         }
     }
