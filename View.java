@@ -115,7 +115,7 @@ public class View extends JFrame {
         
         for(int i = 0; i< 50; i++) {
         	String input = reader.nextLine();
-        	int player = i % 4; // player count = 2
+        	int player = i % 2; // player count = 2
         	// example how to highlite a player:
     		SwingUtilities.invokeLater(() -> playerDisplayPanel.highlightPlayer(player));
     		
