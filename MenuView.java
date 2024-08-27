@@ -57,7 +57,8 @@ public class MenuView extends JFrame {
     }
 
     private class StartGameAction implements ActionListener {
-        @Override
+    	Controller controller = new Controller();
+    	@Override
         public void actionPerformed(ActionEvent e) {
             int playerCount = (int) playerCountComboBox.getSelectedItem();
             String[] playerNames = new String[playerCount];
@@ -71,7 +72,8 @@ public class MenuView extends JFrame {
             // Start the game with the selected player names and game type
             // Change this so the controller notes all the inputs from the
             // menue. And then starts the view!!!
-            new View(playerCount, playerNames, gameType);
+            controller.startGame(playerCount, playerNames, gameType);
+            //new View(playerCount, playerNames, gameType);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             dispose(); // Close the menu
         }
