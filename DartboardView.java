@@ -3,6 +3,8 @@ package vlKlapptDart;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
@@ -13,18 +15,52 @@ import java.util.Scanner;
 public class DartboardView extends JPanel {
 	private ArrayList<DartView> darts = new ArrayList<DartView>();
 	private int diameter = 0;
+	private float aimX = 0.0f;
+	private float aimY = 0.0f;
+	private static Graphics g;
+	private JButton throwButton;
 	
     public DartboardView() {
         this.setBackground(Color.WHITE); // Background color
-    }
+        this.setLayout(new BorderLayout()); // Use BorderLayout for positioning
 
+        // Create the throw button
+        throwButton = new JButton("Throw");
+        throwButton.setPreferredSize(new Dimension(100, 50));
+//////////////////////////////////////////////////////////////////////////////////////
+	// LUCI hier noch die buttons verbinden mit dir weiß nicht 100 wie das geht
+	// / wie du das möchtest <3
+///////////////////////////////////////////////////////////////////////////////////////
+        // Add mouse listener to the button
+        throwButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("Button pressed! LUCI Hier noch Was");
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("Button released! HIER AUch");
+            }
+        });
+
+        // Create a panel for the button and add it to the top
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0)); // Align to the right with no gaps
+        buttonPanel.setOpaque(false); // Make the button panel non-opaque
+        buttonPanel.add(throwButton);
+        add(buttonPanel, BorderLayout.NORTH); // Add button panel to the top
+    }
+    
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        this.g = g;
         drawDartboard(g);
         drawDarts(g);
+        drawAimingIndicators(g);
     }
-
+    
     // Graphics for the Dart Board
     private void drawDartboard(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -131,12 +167,13 @@ public class DartboardView extends JPanel {
     }
     // //
     
+    // Graphics for throwing Darts
     private void drawDarts(Graphics g) {
         for (DartView dart : darts) {
             dart.draw(g);
         }
     }
-
+    //
     public void addDart(float x, float y,Color color) {
     	System.out.println("input:" + x + " " + y);
     	x = x*diameter;
@@ -145,53 +182,59 @@ public class DartboardView extends JPanel {
         darts.add(new DartView((int)x,(int)y, color, (int)diameter/18));
         repaint();  // Repaint the view to show the new dart
     }
-
+    //
     public void clearDarts() {
         darts.clear();
         repaint();  // Repaint the view to clear the darts
     }
+    // //
     
-    /*
-    // Main is only for testing not final and should be deleted at some point
-    public static void main(String[] args) {
-    	//SwingUtilities.invokeLater(Menu::new); // Start with the menu
-    	
-        // Initialize the model, view, and controller
-        DartboardView view = new DartboardView();
+    // Graphics for AmimngIndicators
+    private void drawAimingIndicators(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.BLACK);
+        int height = getHeight();
+        
+        // Draw the bottom aiming bar
+        int barHeight = 10; // Height of the aiming bar
+        g2d.fillRect(0, (height/2) + (diameter/2) - barHeight, diameter, barHeight);
+        
+        // Draw the right aiming bar
+        g2d.fillRect(0, (height/2) - (diameter/2) - barHeight, barHeight, diameter);
+       
+        // Draw visual cues for center and triple ring
+        int centerX = diameter / 2;
+        int centerY = height / 2;
+        
+        // Center marker on bottom bar
+        g2d.setColor(Color.BLUE);
+        g2d.fillRect(centerX - (int)(( 15.9 / 200.0 * (diameter))/2), (height/2) + (diameter/2) - barHeight, (int)( 15.9 / 200.0 * (diameter)), barHeight); // Center marker
 
-        // Create the JFrame outside the invokeLater block to make it accessible
-        JFrame frame = new JFrame("Dartboard");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(view);
-        frame.setSize(600, 600);
-        frame.setLocationRelativeTo(null);
+        // Center marker on left bar
+        g2d.fillRect(0, centerY - (int)(( 15.9 / 200.0 * (diameter))/2), barHeight, (int)( 15.9 / 200.0 * (diameter))); // Center marker
         
-        // Set the frame to always be on top
-        frame.setAlwaysOnTop(true);
+        // Draw the aiming indicators
+        int aimXPos = (int) (aimX * diameter);
+        int aimYPos = (int) (aimY * diameter) + ((height/2) - (diameter/2));
+        System.out.println("X: " + aimXPos);
+        System.out.println("Y: " + aimYPos);
+        // Draw the aiming indicator on the bottom bar
+        g2d.setColor(Color.RED);
+        g2d.fillRect(aimXPos-5, (height/2) + (diameter/2) - barHeight, 10, barHeight); // Small rectangle for aiming indicator
 
-        // Display the frame on the Event Dispatch Thread
-        SwingUtilities.invokeLater(() -> frame.setVisible(true));
-
-        // Simulate reading user input and adding a dart
-        // Write Coordinates or c to clearthe board
-        Scanner reader = new Scanner(System.in);
-        
-        System.out.println("Coordinates go from 0.00 to 0.99, 0.50 is the center");
-        System.out.println("Write Coordinates like this: \"1356\" : x = 0.13 y = 0.56");
-        
-        for(int i = 0; i< 50; i++) {
-        	String tmp = reader.nextLine();
-        	if(tmp.equals("c")) {
-        		SwingUtilities.invokeLater(() -> view.clearDarts());
-        	}else {
-        		int x = Integer.parseInt(tmp.substring(0, 2));
-        		int y = Integer.parseInt(tmp.substring(2, 4));
-        		SwingUtilities.invokeLater(() -> view.addDart((float)x/100,(float)y/100,Color.green));
-        		
-        	}
-        }
-        reader.close();
-        
+        // Draw the aiming indicator on the left bar
+        g2d.fillRect(0, aimYPos - 5, barHeight, 10); // Small rectangle for aiming indicator
     }
-    */
+    
+    // Method to update the aiming position
+    public void setAimingPosition(float x, float y) {
+       // this.aimX = Math.max(0, Math.min(1, x)); // Clamp x between 0 and 1
+        //this.aimY = Math.max(0, Math.min(1, y)); // Clamp y between 0 and 1
+    	aimX = x;
+    	aimY = y;
+    	drawAimingIndicators(g);
+        repaint(); // Repaint to update the aiming indicators
+    }
+    // //
 }
+
