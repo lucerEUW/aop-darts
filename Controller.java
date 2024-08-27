@@ -53,7 +53,12 @@ public class Controller {
 					int y = Integer.parseInt(input.substring(2, 4));
 					int points = calculator.checkHit(x, y);
 					
-					
+					// EXAMPLE
+					float xFloat = ((float)x)/100;
+					float yFloat = ((float)y)/100;
+					// example for the aiming indicators
+					SwingUtilities.invokeLater(() -> View.dartboard.setAimingPosition(xFloat, yFloat));
+					//FOR LUCI
 					
 					// example how to throw a dart:
 					SwingUtilities.invokeLater(() -> {
@@ -74,7 +79,7 @@ public class Controller {
 	                SwingUtilities.invokeLater(() -> View.playerDisplayPanel.highlightPlayer(score.getCurrentPlayerIndex()));
 	            });
 	            try {
-	                // Warte für 1 Sekunde (1000 Millisekunden)
+	                // Warte fÃ¼r 1 Sekunde (1000 Millisekunden)
 	                Thread.sleep(1000);
 	            } catch (InterruptedException e) {
 	                e.printStackTrace();
