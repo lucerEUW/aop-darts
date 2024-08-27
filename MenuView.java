@@ -20,9 +20,14 @@ public class MenuView extends JFrame {
         add(playerCountLabel);
         add(playerCountComboBox);
 
-        // Player name input fields
+         // Player name input fields
         playerNameFields = new JTextField[4]; // Max 4 players
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
+            playerNameFields[i] = new JTextField();
+            playerNameFields[i].setVisible(true);
+            add(playerNameFields[i]);
+        }
+        for (int i = 2; i < 4; i++) {
             playerNameFields[i] = new JTextField();
             playerNameFields[i].setVisible(false); // Initially hidden
             add(playerNameFields[i]);
