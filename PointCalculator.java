@@ -3,11 +3,11 @@ package vlKlapptDart;
 public class PointCalculator {
 	
 	static int radius = 280;
-    // Konstanten für die Mitte der Scheibe
+    // Konstanten fï¿½r die Mitte der Scheibe
     private static final int CENTER_X = 50;
     private static final int CENTER_Y = 50;
     
-    // Radien für die Bereiche
+    // Radien fï¿½r die Bereiche
     private static final double BULLSEYE_RADIUS = 1; // Bullseye
     private static final double INNER_BULL_RADIUS = 4; // Inner Bull (Single Bullseye)
     private static final double TRIPLE_RING_INNER_RADIUS = 25;
@@ -38,7 +38,7 @@ public class PointCalculator {
      *
      * @param x X-Koordinate des Wurfs
      * @param y Y-Koordinate des Wurfs
-     * @return Winkel in Grad relativ zu 0° (oben)
+     * @return Winkel in Grad relativ zu 0ï¿½ (oben)
      */
     private double calculateAngle(int x, int y) {
         double angle = Math.toDegrees(Math.atan2(y - CENTER_Y, x - CENTER_X));
@@ -51,17 +51,17 @@ public class PointCalculator {
     /**
      * Bestimmt den Sektor basierend auf dem Winkel.
      *
-     * @param angle Winkel in Grad relativ zu 0° (oben)
+     * @param angle Winkel in Grad relativ zu 0ï¿½ (oben)
      * @return die Nummer des Sektors (1-20)
      */
     private int getSector(double angle) {
         int[] sectors = {6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20, 1, 18, 4, 13};
-        int sectorIndex = (int) ((angle + 9) % 360) / 18; // +9 zur Mitte der Sektoren, /18 für 20 Sektoren
+        int sectorIndex = (int) ((angle + 9) % 360) / 18; // +9 zur Mitte der Sektoren, /18 fï¿½r 20 Sektoren
         return sectors[sectorIndex];
     }
 
     /**
-     * Überprüft, in welchem Bereich der Wurf liegt.
+     * ï¿½berprï¿½ft, in welchem Bereich der Wurf liegt.
      *
      * @param x X-Koordinate des Wurfs
      * @param y Y-Koordinate des Wurfs
