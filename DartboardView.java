@@ -17,13 +17,13 @@ public class DartboardView extends JPanel {
 	private int diameter = 0;
 	private float aimX = 0.0f;
 	private float aimY = 0.0f;
-	private static Graphics g;
+	public static Graphics g;
 	private JButton throwButton;
+	private DartboardView dartboard = this;
 	
     public DartboardView() {
         this.setBackground(Color.WHITE); // Background color
         this.setLayout(new BorderLayout()); // Use BorderLayout for positioning
-
         // Create the throw button
         throwButton = new JButton("Throw");
         throwButton.setPreferredSize(new Dimension(100, 50));
@@ -35,12 +35,12 @@ public class DartboardView extends JPanel {
         throwButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println("Button pressed! LUCI Hier noch Was");
+            	Throw.setxValue();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("Button released! HIER AUch");
+            	Throw.setyValue(dartboard);
             }
         });
 
@@ -168,7 +168,7 @@ public class DartboardView extends JPanel {
     // //
     
     // Graphics for throwing Darts
-    private void drawDarts(Graphics g) {
+    public void drawDarts(Graphics g) {
         for (DartView dart : darts) {
             dart.draw(g);
         }
@@ -180,6 +180,7 @@ public class DartboardView extends JPanel {
     	y = (getHeight()-diameter)/2 + y*diameter;
     	System.out.println(" real:" + x + " " + y);
         darts.add(new DartView((int)x,(int)y, color, (int)diameter/18));
+        System.out.println("dart added");
         repaint();  // Repaint the view to show the new dart
     }
     //
@@ -216,8 +217,6 @@ public class DartboardView extends JPanel {
         // Draw the aiming indicators
         int aimXPos = (int) (aimX * diameter);
         int aimYPos = (int) (aimY * diameter) + ((height/2) - (diameter/2));
-        System.out.println("X: " + aimXPos);
-        System.out.println("Y: " + aimYPos);
         // Draw the aiming indicator on the bottom bar
         g2d.setColor(Color.RED);
         g2d.fillRect(aimXPos-5, (height/2) + (diameter/2) - barHeight, 10, barHeight); // Small rectangle for aiming indicator
@@ -237,4 +236,3 @@ public class DartboardView extends JPanel {
     }
     // //
 }
-
