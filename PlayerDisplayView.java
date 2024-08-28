@@ -80,6 +80,3 @@ public class PlayerDisplayView extends JPanel {
         }
     }
 }
-
-
-
