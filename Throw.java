@@ -1,45 +1,43 @@
 package vlKlapptDart;
 
 import javax.swing.*;
+
+import java.awt.Color;
 import java.awt.event.*;
 
 public class Throw{
 	 private static boolean running = true;
 	 private static int currentNumber = 0;
 	 private static boolean ascending = true;
-	 private static int xValue;
-	 private static int yValue;
+	 public static float xValue = 0;
+	 public static float yValue = 0;
+	 private static boolean xRunning = true;
+	 private static boolean yRunning = false;
+	 private static GameScore score;
+	 public static int speed = 1;
+	 public static boolean finishedThrow = false;
 	 
-	 public static void main(String[] args) {
-		 //test button setup
-		 JFrame frame = new JFrame();
-	     JButton button = new JButton("stop");
-	     JLabel label = new JLabel("currentNumber: 0");
-	     frame.setLayout(new java.awt.FlowLayout());
-	     frame.add(label);
-	     frame.add(button);
-	     frame.setSize(300, 200);
-	     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	     frame.setVisible(true);
-		 
+	 public synchronized void startThrow(View view, GameScore scoreIn) {
+		 score = scoreIn;
 	     //starting extra thread for counter running simultaneously
 	     Thread incrementerThread = new Thread(() -> {
-	          while (true) {
+	          while (!finishedThrow) {
 	              if (!running) {
 	                  break;
 	              }
 	              
 	              //looping between 0-99
-	              label.setText("Current Number: " + currentNumber);
+	              updateIndicatorBar(view.dartboard);
+	              
 	              if (currentNumber >= 99) {
 	                  ascending = false; 
 	              } else if (currentNumber <= 0) {
 	                  ascending = true; 
 	              }
 	              if (ascending) {
-	                  currentNumber++;
+	            	  currentNumber += speed;
 	              } else {
-	                  currentNumber--;
+	            	  currentNumber -= speed;
 	              }
 
 	              try {
@@ -51,20 +49,30 @@ public class Throw{
 	      });
 	     incrementerThread.start();
 	     
-	     //storing values from both pressing and releasing 
-	     button.addMouseListener(new MouseAdapter() {
-	    	 public void mousePressed(MouseEvent e) {
-	    		 xValue = currentNumber;
-	    		 System.out.println("xValue: " + xValue);
-	    		 currentNumber = 0;
-	    		 ascending = true;
-	         }
-	    	 //and releasing 
-	         public void mouseReleased(MouseEvent e) {
-	        	 running = false;
-	        	 yValue = currentNumber;
-	    		 System.out.println("xValue: " + yValue);
-	         }
-	     });
 	 }
+     public static void setxValue() {
+    	 xRunning = false;
+    	 yRunning = true;
+		 xValue = (float) currentNumber/100;
+		 System.out.println("xValue: " + xValue);
+		 currentNumber = 0;
+		 ascending = true;
+     }
+     
+     public static void setyValue(DartboardView dartboardView) {
+    	 running = false;
+    	 yValue = (float) currentNumber/100;
+		 System.out.println("yValue: " + yValue);
+		 dartboardView.addDart(xValue, yValue, score.getCurrentPlayer().getColor());
+		 dartboardView.drawDarts(dartboardView.g);
+		 finishedThrow = true;
+     }
+     
+     private void updateIndicatorBar(DartboardView dartboardView) {
+    	 if (xRunning){
+    		 SwingUtilities.invokeLater(() -> dartboardView.setAimingPosition((float) currentNumber/100, 0));
+    	 }else if (yRunning) {
+    		 SwingUtilities.invokeLater(() -> dartboardView.setAimingPosition(xValue, (float) currentNumber/100));
+    	 }
+     }
 }
