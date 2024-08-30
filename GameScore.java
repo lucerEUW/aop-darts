@@ -70,4 +70,8 @@ public class GameScore {
     public int getRounds() {
         return round;
     }
+    
+    public List<PlayerView> getPlayers() {
+    	return players;
+    }
 }

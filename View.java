@@ -66,7 +66,7 @@ public class View extends JFrame {
 
         // Sort players by points in descending order
         List<PlayerView> sortedPlayers = new ArrayList<>(players);
-        Collections.sort(sortedPlayers, Comparator.comparingInt(PlayerView::getPoints).reversed());
+        Collections.sort(sortedPlayers, Comparator.comparingInt(PlayerView::getPoints));//.reversed()
 
         // Add player rankings to the panel
         for (int i = 0; i < sortedPlayers.size(); i++) {

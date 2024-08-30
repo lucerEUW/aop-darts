@@ -11,50 +11,47 @@ public class Throw{
 	 private static boolean ascending = true;
 	 public static float xValue = 0;
 	 public static float yValue = 0;
-	 private static boolean xRunning = true;
-	 private static boolean yRunning = false;
+	 public static boolean xRunning = true;
+	 public static boolean yRunning = false;
 	 private static GameScore score;
 	 public static int speed = 1;
 	 public static boolean finishedThrow = false;
 	 
-	 public synchronized void startThrow(View view, GameScore scoreIn) {
+	 public void Throw(View view, GameScore scoreIn) {
 		 score = scoreIn;
-	     //starting extra thread for counter running simultaneously
-	     Thread incrementerThread = new Thread(() -> {
-	          while (!finishedThrow) {
-	              if (!running) {
-	                  break;
-	              }
-	              
-	              //looping between 0-99
-	              updateIndicatorBar(view.dartboard);
-	              
-	              if (currentNumber >= 99) {
-	                  ascending = false; 
-	              } else if (currentNumber <= 0) {
-	                  ascending = true; 
-	              }
-	              if (ascending) {
-	            	  currentNumber += speed;
-	              } else {
-	            	  currentNumber -= speed;
-	              }
+		 while (!finishedThrow) {
+			 /*
+             if (!running) {
+                 break;
+             }*/
+             
+             //looping between 0-99
+             updateIndicatorBar(view.dartboard);
+             
+             if (currentNumber >= 99) {
+                 ascending = false; 
+             } else if (currentNumber <= 0) {
+                 ascending = true; 
+             }
+             if (ascending) {
+           	  currentNumber = currentNumber + speed;
+             } else {
+           	  currentNumber =currentNumber - speed;
+             }
 
-	              try {
-	                  Thread.sleep(10);
-	              } catch (InterruptedException e) {
-	                  Thread.currentThread().interrupt();
-	              }
-	          }
-	      });
-	     incrementerThread.start();
-	     
+             try {
+                 Thread.sleep(10);
+             } catch (InterruptedException e) {
+                 Thread.currentThread().interrupt();
+             }
+         }
 	 }
+	 
      public static void setxValue() {
     	 xRunning = false;
     	 yRunning = true;
 		 xValue = (float) currentNumber/100;
-		 System.out.println("xValue: " + xValue);
+		 //System.out.println("xValue: " + xValue);
 		 currentNumber = 0;
 		 ascending = true;
      }
@@ -62,9 +59,8 @@ public class Throw{
      public static void setyValue(DartboardView dartboardView) {
     	 running = false;
     	 yValue = (float) currentNumber/100;
-		 System.out.println("yValue: " + yValue);
-		 dartboardView.addDart(xValue, yValue, score.getCurrentPlayer().getColor());
-		 dartboardView.drawDarts(dartboardView.g);
+		 //System.out.println("yValue: " + yValue);
+		// dartboardView.addDart(xValue, yValue, score.getCurrentPlayer().getColor());
 		 finishedThrow = true;
      }
      
@@ -74,5 +70,13 @@ public class Throw{
     	 }else if (yRunning) {
     		 SwingUtilities.invokeLater(() -> dartboardView.setAimingPosition(xValue, (float) currentNumber/100));
     	 }
+     }
+     
+     public float getx() {
+    	 return xValue;
+     }
+
+     public float gety() {
+    	 return yValue;
      }
 }
