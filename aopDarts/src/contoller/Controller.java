@@ -59,10 +59,6 @@ public class Controller {
             ExecutorService service = Executors.newSingleThreadExecutor();
 
             for (int throwNumber = 1; throwNumber < 4; throwNumber++) {
-                if (score.isGameOver()) {
-                    view.showWinScreen(score.getPlayers());
-                    break;
-                }
                 if (!debugActiv) {
                     // Simulate a throw and wait for it to complete
                     Throw currentThrow = new Throw();
@@ -115,6 +111,7 @@ public class Controller {
                 SwingUtilities.invokeLater(() -> View.dartboard.clearDarts()); // Clear the dartboard for the next player
             }
         }
+        view.showWinScreen(score.getPlayers());
         reader.close(); // Close the scanner when the game is over
     }
 
