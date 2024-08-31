@@ -15,7 +15,7 @@ public class Throw{
 	 private static boolean xRunning = true;
 	 private static boolean yRunning = false;
 	 // The speed at which the indicator bar moves (higher = slower)
-	 private static int speed = 5;
+	 private static int speed = 10;
 	 // Flag to indicate if the throw is complete
 	 private static boolean finishedThrow = false;
 	 
